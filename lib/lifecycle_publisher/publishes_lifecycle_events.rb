@@ -8,26 +8,34 @@ module LifecyclePublisher
       def publishes_lifecycle_events(options = {})
         self.send :include, InstanceMethods
 
-        after_commit :publish_creation, on: :create
-        after_commit :publish_update, on: :update
-        after_commit :publish_destruction, on: :destroy
+        lifecycle_events = [:create, :update, :destroy]
+
+        options[:on] ||= lifecycle_events
+        options_on = Array(options[:on])
+
+        lifecycle_events.each do |event|
+          after_commit "publish_#{ event }".to_sym, on: event if options_on.include?(event)
+        end
       end
     end
 
     module InstanceMethods
-      def publish_creation
-        publish("events.models.#{ self.class.name.underscore }.created", self.attributes)
+      def publish_create
+        publish("created", self.attributes)
       end
 
       def publish_update
-        publish("events.models.#{ self.class.name.underscore }.updated", self.previous_changes)
+        publish("updated", self.previous_changes) if self.previous_changes.any?
       end
 
-      def publish_destruction
-        publish("events.models.#{ self.class.name.underscore }.destroyed", self.attributes)
+      def publish_destroy
+        publish("destroyed", self.attributes)
       end
 
-      def publish(routing_key, data = {})
+      def publish(event, data = {})
+        prefix = defined?(::Rails) ? "#{  Rails.application.class.parent_name }." : ""
+        routing_key = "#{ prefix }events.models.#{ self.class.name.underscore }.#{ event }"
+
         Hutch.connect
         Hutch.publish(routing_key, data)
       end
