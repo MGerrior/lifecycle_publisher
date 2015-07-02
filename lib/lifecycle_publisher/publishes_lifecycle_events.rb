@@ -16,15 +16,20 @@ module LifecyclePublisher
 
     module InstanceMethods
       def publish_creation
-        p "A new #{ self.class.name } was created with id: #{ self.id } :)"
+        publish("events.models.#{ self.class.name.underscore }.created", self.attributes)
       end
 
       def publish_update
-        p "It looks like #{ self.class.name } #{ self.id } was updated :|"
+        publish("events.models.#{ self.class.name.underscore }.updated", self.previous_changes)
       end
 
       def publish_destruction
-        p "It looks like #{ self.class.name } #{ self.id } was destroyed :("
+        publish("events.models.#{ self.class.name.underscore }.destroyed", self.attributes)
+      end
+
+      def publish(routing_key, data = {})
+        Hutch.connect
+        Hutch.publish(routing_key, data)
       end
     end
   end
