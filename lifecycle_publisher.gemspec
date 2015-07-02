@@ -12,4 +12,6 @@ Gem::Specification.new do |s|
   ]
   s.homepage = ""
   s.license = "MIT"
+
+  s.add_runtime_dependency 'hutch', '>= 0.14.0'
 end
