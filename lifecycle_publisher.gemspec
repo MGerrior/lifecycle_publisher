@@ -6,7 +6,10 @@ Gem::Specification.new do |s|
   s.description = "Publishes ActiveRecord lifecycle events (create, update, destroy) to RabbitMQ"
   s.authors = ["Matthew Gerrior"]
   s.email = "gerrior.matthew@gmail.com"
-  s.files = ["lib/lifecycle_publisher.rb"]
+  s.files = [
+    "lib/lifecycle_publisher/publishes_lifecycle_events.rb",
+    "lib/lifecycle_publisher.rb"
+  ]
   s.homepage = ""
   s.licence = "MIT"
 end
