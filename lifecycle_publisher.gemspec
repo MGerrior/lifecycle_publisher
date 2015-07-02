@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "lifecycle_publisher"
   s.version = "0.0.0"
-  s.data = "2015-07-02"
+  s.date = "2015-07-02"
   s.summary = "Lifecyle Publisher"
   s.description = "Publishes ActiveRecord lifecycle events (create, update, destroy) to RabbitMQ"
   s.authors = ["Matthew Gerrior"]
@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
     "lib/lifecycle_publisher.rb"
   ]
   s.homepage = ""
-  s.licence = "MIT"
+  s.license = "MIT"
 end
