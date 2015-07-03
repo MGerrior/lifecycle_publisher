@@ -34,7 +34,7 @@ module LifecyclePublisher
 
       def publish(event, data = {})
         prefix = defined?(::Rails) ? "#{  Rails.application.class.parent_name }." : ""
-        routing_key = "#{ prefix }events.models.#{ self.class.name.underscore }.#{ event }"
+        routing_key = "#{ prefix }events.models.#{ self.class.model_name.underscore }.#{ event }"
 
         Hutch.connect
         Hutch.publish(routing_key, data)
